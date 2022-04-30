@@ -6,6 +6,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +21,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomViewHolder> {
     private Context context;
     private List<NewsHeadlines> headlines;
     private SelectListener listener;
+
+    private int lastPos = -1;
+
 
     public CustomAdapter(Context context, List<NewsHeadlines> headlines, SelectListener listener) {
         this.context = context;
@@ -43,6 +48,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomViewHolder> {
             Picasso.get().load(headlines.get(position).getUrlToImage()).into(holder.img_headline);
 
         }
+
+        setAnimation(holder.itemView, position);
+
         // in here i need to click the card to listener it
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +58,15 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomViewHolder> {
                 listener.OnNewsClicked(headlines.get(position));
             }
         });
+    }
+
+    private void setAnimation(View itemView, int position) {
+        if (position > lastPos) {
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+            itemView.setAnimation(animation);
+            lastPos = position;
+
+        }
     }
 
     @Override
